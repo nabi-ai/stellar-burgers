@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { getFeedsApi } from '@api';
 import { TOrder, TOrdersData } from '@utils-types';
 import { RootState } from '../store';
@@ -9,7 +9,6 @@ type FeedState = {
   totalToday: number;
   isLoading: boolean;
   error: string | null;
-  lastUpdated: number | null;
 };
 
 const initialState: FeedState = {
@@ -17,12 +16,11 @@ const initialState: FeedState = {
   total: 0,
   totalToday: 0,
   isLoading: false,
-  error: null,
-  lastUpdated: null
+  error: null
 };
 
-export const fetchFeeds = createAsyncThunk(
-  'feed/fetchAll',
+export const fetchFeeds = createAsyncThunk<TOrdersData>(
+  'feed/fetchFeeds',
   async (_, { rejectWithValue }) => {
     try {
       const response = await getFeedsApi();
@@ -43,16 +41,6 @@ const feedSlice = createSlice({
       state.orders = [];
       state.total = 0;
       state.totalToday = 0;
-      state.lastUpdated = null;
-    },
-    setFeedData: (state, action: PayloadAction<TOrdersData>) => {
-      state.orders = action.payload.orders;
-      state.total = action.payload.total;
-      state.totalToday = action.payload.totalToday;
-      state.lastUpdated = Date.now();
-    },
-    clearFeedError: (state) => {
-      state.error = null;
     }
   },
   extraReducers: (builder) => {
@@ -66,7 +54,6 @@ const feedSlice = createSlice({
         state.orders = action.payload.orders;
         state.total = action.payload.total;
         state.totalToday = action.payload.totalToday;
-        state.lastUpdated = Date.now();
         state.error = null;
       })
       .addCase(fetchFeeds.rejected, (state, action) => {
@@ -76,14 +63,11 @@ const feedSlice = createSlice({
   }
 });
 
-// export const { clearFeed } = feedSlice.actions;
+export const { clearFeed } = feedSlice.actions;
 export default feedSlice.reducer;
-
 export const selectFeedState = (state: RootState) => state.feed;
 export const selectFeedOrders = (state: RootState) => state.feed.orders;
 export const selectFeedTotal = (state: RootState) => state.feed.total;
 export const selectFeedTotalToday = (state: RootState) => state.feed.totalToday;
 export const selectFeedLoading = (state: RootState) => state.feed.isLoading;
 export const selectFeedError = (state: RootState) => state.feed.error;
-export const selectFeedLastUpdated = (state: RootState) =>
-  state.feed.lastUpdated;

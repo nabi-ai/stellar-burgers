@@ -61,23 +61,23 @@ const profileSlice = createSlice({
   }
 });
 
-// export const {
-//   setUser,
-//   startEditing,
-//   cancelEditing,
-//   updateProfileData,
-//   saveProfileData,
-//   setProfileLoading,
-//   setProfileError,
-//   clearProfile
-// } = profileSlice.actions;
+export const {
+  setUser,
+  startEditing,
+  cancelEditing,
+  updateProfileData,
+  saveProfileData,
+  setProfileLoading,
+  setProfileError,
+  clearProfile
+} = profileSlice.actions;
 
 export default profileSlice.reducer;
 
-// export const selectProfileState = (state: RootState) => state.profile;
-// export const selectProfileUser = (state: RootState) => state.profile.userData;
-// export const selectProfileIsEditing = (state: RootState) =>
-//   state.profile.isEditing;
+export const selectProfileState = (state: RootState) => state.profile;
+export const selectProfileUser = (state: RootState) => state.profile.userData;
+export const selectProfileIsEditing = (state: RootState) =>
+  state.profile.isEditing;
 export const selectProfileOriginalData = (state: RootState) =>
   state.profile.originalData;
 export const selectProfileLoading = (state: RootState) =>

@@ -1,6 +1,6 @@
 import { FC, useMemo, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector } from '../../services/store';
 import { useDispatch } from '../../services/store';
 import { Preloader } from '@ui';
 import { OrderInfoUI } from '@ui';
@@ -28,11 +28,17 @@ export const OrderInfo: FC = () => {
   }, [orderNumber, dispatch]);
 
   useEffect(() => {
-    dispatch(fetchIngredients());
-  }, []);
+    if (!ingredients.length) {
+      import('../../services/slices/ingredientsSlice').then(
+        ({ fetchIngredients }) => {
+          dispatch(fetchIngredients());
+        }
+      );
+    }
+  }, [ingredients.length, dispatch]);
 
   const orderInfo = useMemo(() => {
-    if (!orderData || ingredients.length === 0 || !orderData.ingredients)
+    if (!orderData || !ingredients.length || !orderData.ingredients)
       return null;
 
     const date = new Date(orderData.createdAt);
@@ -42,17 +48,17 @@ export const OrderInfo: FC = () => {
     };
 
     const ingredientsInfo = orderData.ingredients.reduce(
-      (acc: TIngredientsWithCount, itemId) => {
-        const ingredient = ingredients.find((ing) => ing._id === itemId);
-        if (!ingredient) return acc;
-
-        if (!acc[itemId]) {
-          acc[itemId] = {
-            ...ingredient,
-            count: 1
-          };
+      (acc: TIngredientsWithCount, item) => {
+        if (!acc[item]) {
+          const ingredient = ingredients.find((ing) => ing._id === item);
+          if (ingredient) {
+            acc[item] = {
+              ...ingredient,
+              count: 1
+            };
+          }
         } else {
-          acc[itemId].count++;
+          acc[item].count++;
         }
 
         return acc;

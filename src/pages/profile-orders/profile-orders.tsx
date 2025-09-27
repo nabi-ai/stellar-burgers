@@ -1,5 +1,5 @@
 import { ProfileOrdersUI } from '@ui-pages';
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { useDispatch } from '../../services/store';
 import {
@@ -17,14 +17,20 @@ export const ProfileOrders: FC = () => {
   const isLoading = useSelector(selectProfileOrdersLoading);
   const error = useSelector(selectProfileOrdersError);
   const ingredients = useSelector(selectIngredients);
+  const hasFetched = useRef(false);
 
   useEffect(() => {
-    dispatch(fetchProfileOrders());
+    if (!hasFetched.current) {
+      dispatch(fetchProfileOrders());
+      hasFetched.current = true;
+    }
   }, [dispatch]);
 
   useEffect(() => {
-    dispatch(fetchIngredients());
-  }, []);
+    if (!ingredients.length) {
+      dispatch(fetchIngredients());
+    }
+  }, [dispatch, ingredients.length]);
 
   if (isLoading) {
     return <Preloader />;

@@ -1,6 +1,6 @@
 import { Preloader } from '@ui';
 import { FeedUI } from '@ui-pages';
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { useDispatch } from '../../services/store';
 import { selectFeedOrders, selectFeedLoading, fetchFeeds } from '@slices';
@@ -11,20 +11,26 @@ export const Feed: FC = () => {
   const orders = useSelector(selectFeedOrders);
   const isLoading = useSelector(selectFeedLoading);
   const ingredients = useSelector(selectIngredients);
+  const hasLoaded = useRef(false);
 
   useEffect(() => {
-    dispatch(fetchFeeds());
-  }, [dispatch]);
+    if (!hasLoaded.current && !isLoading) {
+      hasLoaded.current = true;
+      dispatch(fetchFeeds());
+    }
+  }, []);
 
   useEffect(() => {
-    dispatch(fetchIngredients());
+    if (!ingredients.length) {
+      dispatch(fetchIngredients());
+    }
   }, []);
 
   const handleGetFeeds = () => {
     dispatch(fetchFeeds());
   };
 
-  if (isLoading || ingredients.length === 0) {
+  if (isLoading || !ingredients.length) {
     return <Preloader />;
   }
 

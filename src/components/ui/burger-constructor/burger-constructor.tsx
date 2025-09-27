@@ -12,11 +12,12 @@ import { Preloader, OrderDetailsUI } from '@ui';
 
 export const BurgerConstructorUI: FC<BurgerConstructorUIProps> = ({
   constructorItems,
-  orderRequest,
+  isOrderLoading,
   price,
-  orderModalData,
+  createdOrderModalData,
   onOrderClick,
-  closeOrderModal
+  closeOrderModal,
+  showOrderPreparingStarted
 }) => (
   <section className={styles.burger_constructor}>
     {constructorItems.bun ? (
@@ -37,7 +38,8 @@ export const BurgerConstructorUI: FC<BurgerConstructorUIProps> = ({
       </div>
     )}
     <ul className={styles.elements}>
-      {constructorItems.ingredients.length > 0 ? (
+      {constructorItems.ingredients &&
+      constructorItems.ingredients.length > 0 ? (
         constructorItems.ingredients.map(
           (item: TConstructorIngredient, index: number) => (
             <BurgerConstructorElement
@@ -87,18 +89,18 @@ export const BurgerConstructorUI: FC<BurgerConstructorUIProps> = ({
       />
     </div>
 
-    {orderRequest && (
-      <Modal onClose={closeOrderModal} title={'Оформляем заказ...'}>
-        <Preloader />
-      </Modal>
-    )}
-
-    {orderModalData && (
+    {showOrderPreparingStarted && (
       <Modal
         onClose={closeOrderModal}
-        title={orderRequest ? 'Оформляем заказ...' : ''}
+        title={isOrderLoading ? 'Оформляем заказ...' : ''}
       >
-        <OrderDetailsUI orderNumber={orderModalData.number} />
+        {isOrderLoading ? (
+          <Preloader />
+        ) : (
+          createdOrderModalData && (
+            <OrderDetailsUI orderNumber={createdOrderModalData.number} />
+          )
+        )}
       </Modal>
     )}
   </section>

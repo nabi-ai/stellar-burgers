@@ -46,7 +46,8 @@ const ingredientsSlice = createSlice({
       })
       .addCase(fetchIngredients.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.payload as string;
+        state.error =
+          (action.payload as string) ?? 'Failed to fetch ingredients';
       });
   }
 });

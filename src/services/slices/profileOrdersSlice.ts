@@ -1,24 +1,26 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { getOrdersApi } from '@api';
 import { TOrder } from '@utils-types';
 import { RootState } from '../store';
 
 type ProfileOrdersState = {
   orders: TOrder[];
+  total: number;
+  totalToday: number;
   isLoading: boolean;
   error: string | null;
-  lastUpdated: number | null;
 };
 
 const initialState: ProfileOrdersState = {
   orders: [],
+  total: 0,
+  totalToday: 0,
   isLoading: false,
-  error: null,
-  lastUpdated: null
+  error: null
 };
 
-export const fetchProfileOrders = createAsyncThunk(
-  'profileOrders/fetchAll',
+export const fetchProfileOrders = createAsyncThunk<TOrder[]>(
+  'profileOrders/fetchOrders',
   async (_, { rejectWithValue }) => {
     try {
       const response = await getOrdersApi();
@@ -39,14 +41,8 @@ const profileOrdersSlice = createSlice({
   reducers: {
     clearProfileOrders: (state) => {
       state.orders = [];
-      state.lastUpdated = null;
-    },
-    setProfileOrders: (state, action: PayloadAction<TOrder[]>) => {
-      state.orders = action.payload;
-      state.lastUpdated = Date.now();
-    },
-    clearProfileOrdersError: (state) => {
-      state.error = null;
+      state.total = 0;
+      state.totalToday = 0;
     }
   },
   extraReducers: (builder) => {
@@ -58,7 +54,8 @@ const profileOrdersSlice = createSlice({
       .addCase(fetchProfileOrders.fulfilled, (state, action) => {
         state.isLoading = false;
         state.orders = action.payload;
-        state.lastUpdated = Date.now();
+        state.total = action.payload.length;
+        state.totalToday = action.payload.length;
         state.error = null;
       })
       .addCase(fetchProfileOrders.rejected, (state, action) => {
@@ -68,17 +65,17 @@ const profileOrdersSlice = createSlice({
   }
 });
 
-// export const { clearProfileOrders, setProfileOrders, clearProfileOrdersError } =
-//   profileOrdersSlice.actions;
+export const { clearProfileOrders } = profileOrdersSlice.actions;
 export default profileOrdersSlice.reducer;
-
-// export const selectProfileOrdersState = (state: RootState) =>
-//   state.profileOrders;
+export const selectProfileOrdersState = (state: RootState) =>
+  state.profileOrders;
 export const selectProfileOrders = (state: RootState) =>
   state.profileOrders.orders;
+export const selectProfileOrdersTotal = (state: RootState) =>
+  state.profileOrders.total;
+export const selectProfileOrdersTotalToday = (state: RootState) =>
+  state.profileOrders.totalToday;
 export const selectProfileOrdersLoading = (state: RootState) =>
   state.profileOrders.isLoading;
 export const selectProfileOrdersError = (state: RootState) =>
   state.profileOrders.error;
-// export const selectProfileOrdersLastUpdated = (state: RootState) =>
-//   state.profileOrders.lastUpdated;

@@ -15,9 +15,23 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const DefaultProfileMenu: Story = {
+export const ProfilePageMenu: Story = {
   args: {
     pathname: '/profile',
+    handleLogout: () => {}
+  }
+};
+
+export const ProfileOrdersPageMenu: Story = {
+  args: {
+    pathname: '/profile/orders',
+    handleLogout: () => {}
+  }
+};
+
+export const ProfileOrdersDetailPageMenu: Story = {
+  args: {
+    pathname: '/profile/orders/12345',
     handleLogout: () => {}
   }
 };

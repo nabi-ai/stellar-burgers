@@ -1,5 +1,5 @@
-import React from 'react';
-import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
+
 import { Modal, OrderInfo, IngredientDetails } from '@components';
 import {
   ConstructorPage,
@@ -22,12 +22,7 @@ import styles from './app.module.css';
 
 const App = () => {
   const location = useLocation();
-  const navigate = useNavigate();
   const background = location.state?.backgroundLocation;
-
-  const handleModalClose = () => {
-    navigate(-1);
-  };
 
   return (
     <div className={styles.app}>
@@ -44,18 +39,25 @@ const App = () => {
 
         <Route path='/ingredients/:id' element={<IngredientDetails />} />
 
-        <Route
-          path='/profile'
-          element={
-            <ProtectedRoute>
-              <Profile />
-            </ProtectedRoute>
-          }
-        >
-          <Route index element={<Profile />} />
-          <Route path='orders' element={<ProfileOrders />} />
+        <Route path='/profile'>
           <Route
-            path='orders/:number'
+            index
+            element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path='orders'
+            element={
+              <ProtectedRoute>
+                <ProfileOrders />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path='orders/:id'
             element={
               <ProtectedRoute>
                 <OrderInfo />
@@ -72,6 +74,7 @@ const App = () => {
             </AuthRoute>
           }
         />
+
         <Route
           path='/register'
           element={
@@ -80,6 +83,7 @@ const App = () => {
             </AuthRoute>
           }
         />
+
         <Route
           path='/forgot-password'
           element={
@@ -88,6 +92,7 @@ const App = () => {
             </AuthRoute>
           }
         />
+
         <Route
           path='/reset-password'
           element={
@@ -103,26 +108,25 @@ const App = () => {
       {background && (
         <Routes>
           <Route
-            path='/ingredients/:id'
-            element={
-              <Modal title={'Детали ингредиента'} onClose={handleModalClose}>
-                <IngredientDetails />
-              </Modal>
-            }
-          />
-          <Route
             path='/feed/:number'
             element={
-              <Modal title={'Детали заказа'} onClose={handleModalClose}>
+              <Modal
+                title={'Детали заказа'}
+                onClose={() => window.history.back()}
+              >
                 <OrderInfo />
               </Modal>
             }
           />
+          <Route path='/ingredients/:id' element={<IngredientDetails />} />
           <Route
-            path='/profile/orders/:number'
+            path='/profile/orders/:id'
             element={
               <ProtectedRoute>
-                <Modal title={'Детали заказа'} onClose={handleModalClose}>
+                <Modal
+                  title={'Детали заказа'}
+                  onClose={() => window.history.back()}
+                >
                   <OrderInfo />
                 </Modal>
               </ProtectedRoute>

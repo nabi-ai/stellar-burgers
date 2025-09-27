@@ -5,11 +5,13 @@ import type { RootState } from '../store';
 export type ConstructorState = {
   bun: TIngredient | null;
   items: TConstructorIngredient[];
+  showOrderPreparingStarted: boolean;
 };
 
 const initialState: ConstructorState = {
   bun: null,
-  items: []
+  items: [],
+  showOrderPreparingStarted: false
 };
 
 const burgerConstructorSlice = createSlice({
@@ -18,6 +20,9 @@ const burgerConstructorSlice = createSlice({
   reducers: {
     setBun(state, action: PayloadAction<TIngredient>) {
       state.bun = action.payload;
+    },
+    setShowOrderPreparingStarted(state, action: PayloadAction<boolean>) {
+      state.showOrderPreparingStarted = action.payload;
     },
     addIngredient(state, action: PayloadAction<TIngredient>) {
       if (!state.items) {
@@ -52,8 +57,14 @@ const burgerConstructorSlice = createSlice({
   }
 });
 
-export const { setBun, addIngredient, removeIngredient, reorderItems, reset } =
-  burgerConstructorSlice.actions;
+export const {
+  setBun,
+  addIngredient,
+  removeIngredient,
+  reorderItems,
+  setShowOrderPreparingStarted,
+  reset
+} = burgerConstructorSlice.actions;
 export default burgerConstructorSlice.reducer;
 
 export const selectConstructor = (state: RootState) => state.burgerConstructor;
@@ -61,3 +72,5 @@ export const selectConstructorBun = (state: RootState) =>
   state.burgerConstructor.bun;
 export const selectConstructorItems = (state: RootState) =>
   state.burgerConstructor.items;
+export const selectShowOrderPreparingStarted = (state: RootState) =>
+  state.burgerConstructor.showOrderPreparingStarted;

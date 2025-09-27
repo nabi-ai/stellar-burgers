@@ -1,9 +1,15 @@
 import { FC, useMemo } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector } from '../../services/store';
 import { useDispatch } from '../../services/store';
 import { useNavigate } from 'react-router-dom';
 import { BurgerConstructorUI } from '@ui';
-import { selectConstructorBun, selectConstructorItems } from '@slices';
+import {
+  selectConstructorBun,
+  selectConstructorItems,
+  selectCreatedOrder,
+  selectShowOrderPreparingStarted,
+  setShowOrderPreparingStarted
+} from '@slices';
 import { selectOrderLoading, selectCurrentOrder, createOrder } from '@slices';
 import { selectCurrentUser } from '@slices';
 
@@ -12,8 +18,11 @@ export const BurgerConstructor: FC = () => {
   const navigate = useNavigate();
   const bun = useSelector(selectConstructorBun);
   const items = useSelector(selectConstructorItems);
-  const orderRequest = useSelector(selectOrderLoading);
-  const orderModalData = useSelector(selectCurrentOrder);
+  const showOrderPreparingStarted = useSelector(
+    selectShowOrderPreparingStarted
+  );
+  const isOrderLoading = useSelector(selectOrderLoading);
+  const createdOrderModalData = useSelector(selectCreatedOrder);
   const user = useSelector(selectCurrentUser);
 
   const constructorItems = {
@@ -27,7 +36,11 @@ export const BurgerConstructor: FC = () => {
       return;
     }
 
-    if (!constructorItems.bun || orderRequest || !constructorItems.ingredients)
+    if (
+      !constructorItems.bun ||
+      isOrderLoading ||
+      !constructorItems.ingredients
+    )
       return;
 
     const ingredientIds = [
@@ -40,7 +53,7 @@ export const BurgerConstructor: FC = () => {
   };
 
   const closeOrderModal = () => {
-    window.history.back();
+    dispatch(setShowOrderPreparingStarted(false));
   };
 
   const price = useMemo(
@@ -55,11 +68,12 @@ export const BurgerConstructor: FC = () => {
   return (
     <BurgerConstructorUI
       price={price}
-      orderRequest={orderRequest}
+      isOrderLoading={isOrderLoading}
       constructorItems={constructorItems}
-      orderModalData={orderModalData}
+      createdOrderModalData={createdOrderModalData}
       onOrderClick={onOrderClick}
       closeOrderModal={closeOrderModal}
+      showOrderPreparingStarted={showOrderPreparingStarted}
     />
   );
 };

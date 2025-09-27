@@ -1,8 +1,7 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useDispatch } from '../../services/store';
 import { fetchUser, initialize } from '@slices';
 import { getCookie } from '../../utils/cookie';
-import { fetchIngredients } from '@slices';
 
 export const AppInit = () => {
   const dispatch = useDispatch();
@@ -11,8 +10,6 @@ export const AppInit = () => {
     const accessToken = getCookie('accessToken');
     const refreshToken = localStorage.getItem('refreshToken');
 
-    dispatch(fetchIngredients());
-
     if (accessToken && refreshToken) {
       dispatch(fetchUser()).catch(() => {
         dispatch(initialize());
@@ -20,7 +17,7 @@ export const AppInit = () => {
     } else {
       dispatch(initialize());
     }
-  }, []);
+  }, [dispatch]);
 
   return null;
 };
