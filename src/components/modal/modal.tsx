@@ -1,8 +1,9 @@
 import { FC, memo, useEffect } from 'react';
 import ReactDOM from 'react-dom';
-
+import styles from './modal.module.css';
 import { TModalProps } from './type';
-import { ModalUI } from '@ui';
+import { ModalOverlayUI } from '@ui';
+import { CloseIcon } from '@zlden/react-developer-burger-ui-components';
 
 const modalRoot = document.getElementById('modals');
 
@@ -19,9 +20,16 @@ export const Modal: FC<TModalProps> = memo(({ title, onClose, children }) => {
   }, [onClose]);
 
   return ReactDOM.createPortal(
-    <ModalUI title={title} onClose={onClose}>
-      {children}
-    </ModalUI>,
-    modalRoot as HTMLDivElement
+    <>
+      <ModalOverlayUI onClose={onClose} />
+      <div className={styles.modal}>
+        <h2 className='text text_type_main-large mt-10 ml-10'>{title}</h2>
+        <button className={styles.closeButton} onClick={onClose}>
+          <CloseIcon type='primary' />
+        </button>
+        {children}
+      </div>
+    </>,
+    document.getElementById('modals') as HTMLDivElement
   );
 });

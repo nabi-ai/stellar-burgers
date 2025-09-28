@@ -3,19 +3,13 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  width: 520px;
 }
 
 .header {
-  border: 1px #8A38F5 dashed;
   border-radius: 5px;
   padding: 21px 20px 3px 20px;
   width: 680px;
   margin-bottom: 69px;
-}
-
-.title {
-  margin-bottom: 30px;
 }
 
 .img {
@@ -25,7 +19,7 @@
 .nutritional_values {
   display: flex;
   justify-content: space-between;
-  width: 100%;
+  width: 520px;
   list-style-type: none;
   padding: 0;
   margin: 0;
