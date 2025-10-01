@@ -1,14 +1,12 @@
-import { FC } from 'react';
-import { Preloader } from '../ui/preloader';
-import { IngredientDetailsUI } from '../ui/ingredient-details';
+import React, { FC } from 'react';
+import { IngredientDetailsUI } from '@ui';
+import styles from './ingredient-details.module.css';
 
-export const IngredientDetails: FC = () => {
-  /** TODO: взять переменную из стора */
-  const ingredientData = null;
-
-  if (!ingredientData) {
-    return <Preloader />;
-  }
-
-  return <IngredientDetailsUI ingredientData={ingredientData} />;
-};
+export const IngredientDetails: FC = () => (
+  <div className={styles.container}>
+    <div className={`${styles.title} text text_type_main-large mt-2 mb-4`}>
+      Детали ингредиента
+    </div>
+    <IngredientDetailsUI />
+  </div>
+);
