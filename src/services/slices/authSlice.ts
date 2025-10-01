@@ -12,7 +12,7 @@ import { TUser } from '@utils-types';
 import { setCookie, deleteCookie } from '../../utils/cookie';
 import { RootState } from '../store';
 
-type UserState = {
+export type UserState = {
   isInitialized: boolean;
   isLoading: boolean;
   userData: TUser | null;

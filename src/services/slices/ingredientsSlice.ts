@@ -3,7 +3,7 @@ import { getIngredientsApi } from '@api';
 import { TIngredient } from '@utils-types';
 import { RootState } from '../store';
 
-type IngredientsState = {
+export type IngredientsState = {
   items: TIngredient[];
   isLoading: boolean;
   error: string | null;

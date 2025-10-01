@@ -3,7 +3,7 @@ import { getOrdersApi } from '@api';
 import { TOrder } from '@utils-types';
 import { RootState } from '../store';
 
-type ProfileOrdersState = {
+export type ProfileOrdersState = {
   orders: TOrder[];
   total: number;
   totalToday: number;

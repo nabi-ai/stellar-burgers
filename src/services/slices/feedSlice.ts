@@ -3,7 +3,7 @@ import { getFeedsApi } from '@api';
 import { TOrder, TOrdersData } from '@utils-types';
 import { RootState } from '../store';
 
-type FeedState = {
+export type FeedState = {
   orders: TOrder[];
   total: number;
   totalToday: number;

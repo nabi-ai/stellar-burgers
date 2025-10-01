@@ -22,9 +22,13 @@ export const Modal: FC<TModalProps> = memo(({ title, onClose, children }) => {
   return ReactDOM.createPortal(
     <>
       <ModalOverlayUI onClose={onClose} />
-      <div className={styles.modal}>
+      <div className={styles.modal} data-testid='modal'>
         <h2 className='text text_type_main-large mt-10 ml-10'>{title}</h2>
-        <button className={styles.closeButton} onClick={onClose}>
+        <button
+          className={styles.closeButton}
+          onClick={onClose}
+          data-testid='modal-close'
+        >
           <CloseIcon type='primary' />
         </button>
         {children}

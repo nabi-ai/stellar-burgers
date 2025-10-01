@@ -3,5 +3,9 @@ import styles from './modal-overlay.module.css';
 import { TModalOverlay } from './type';
 
 export const ModalOverlayUI: FC<TModalOverlay> = ({ onClose }) => (
-  <div className={styles.overlay} onClick={onClose} />
+  <div
+    className={styles.overlay}
+    onClick={onClose}
+    data-testid='modal-overlay'
+  />
 );

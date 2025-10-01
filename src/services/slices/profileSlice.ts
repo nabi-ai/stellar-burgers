@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { TUser } from '@utils-types';
 import { RootState } from '../store';
 
-type ProfileState = {
+export type ProfileState = {
   userData: TUser | null;
   isEditing: boolean;
   originalData: TUser | null;
