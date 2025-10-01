@@ -1,3 +1,5 @@
+import { SELECTORS } from '../support/selectors';
+
 describe('Конструктор бургера', () => {
   beforeEach(() => {
     // Мокаем загрузку ингредиентов
@@ -29,41 +31,35 @@ describe('Конструктор бургера', () => {
       cy.addIngredient('Соус Spicy-X');
 
       // Проверяем, что ингредиенты добавились в конструктор
-      cy.get('[data-testid="constructor-bun"]').should('have.length', 2); // Верхняя и нижняя булка
-      cy.get('[data-testid="constructor-ingredient"]').should('have.length', 1);
+      cy.get(SELECTORS.CONSTRUCTOR_BUN).should('have.length', 2); // Верхняя и нижняя булка
+      cy.get(SELECTORS.CONSTRUCTOR_INGREDIENT).should('have.length', 1);
     });
   });
 
   describe('Модальное окно ингредиента', () => {
     it('должен открывать модальное окно при клике на ингредиент', () => {
       // Кликаем на ингредиент для открытия модального окна
-      cy.get('[data-testid="ingredient-card"]')
-        .contains('Соус Spicy-X')
-        .click();
+      cy.get(SELECTORS.INGREDIENT_CARD).contains('Соус Spicy-X').click();
 
       // Проверяем, что модальное окно открылось с правильными данными
-      cy.get('[data-testid="modal"]')
+      cy.get(SELECTORS.MODAL)
         .should('be.visible')
         .and('contain', 'Детали ингредиента')
         .and('contain', 'Соус Spicy-X');
     });
 
     it('должен закрывать модальное окно при клике на крестик', () => {
-      cy.get('[data-testid="ingredient-card"]')
-        .contains('Соус Spicy-X')
-        .click();
+      cy.get(SELECTORS.INGREDIENT_CARD).contains('Соус Spicy-X').click();
       // Закрываем модальное окно крестиком
-      cy.get('[data-testid="modal-close"]').click();
-      cy.get('[data-testid="modal"]').should('not.exist');
+      cy.get(SELECTORS.MODAL_CLOSE).click();
+      cy.get(SELECTORS.MODAL).should('not.exist');
     });
 
     it('должен закрывать модальное окно при клике на оверлей', () => {
-      cy.get('[data-testid="ingredient-card"]')
-        .contains('Соус Spicy-X')
-        .click();
+      cy.get(SELECTORS.INGREDIENT_CARD).contains('Соус Spicy-X').click();
       // Закрываем модальное окно кликом на оверлей
-      cy.get('[data-testid="modal-overlay"]').click({ force: true });
-      cy.get('[data-testid="modal"]').should('not.exist');
+      cy.get(SELECTORS.MODAL_OVERLAY).click({ force: true });
+      cy.get(SELECTORS.MODAL).should('not.exist');
     });
   });
 
@@ -74,18 +70,18 @@ describe('Конструктор бургера', () => {
       cy.addIngredient('Соус Spicy-X');
 
       // Оформляем заказ
-      cy.get('[data-testid="order-button"]').click();
+      cy.get(SELECTORS.ORDER_BUTTON).click();
       cy.wait('@createOrder');
 
       // Проверяем модальное окно с номером заказа
-      cy.get('[data-testid="modal"]').should('contain', '1234');
+      cy.get(SELECTORS.MODAL).should('contain', '1234');
 
       // Закрываем модальное окно
-      cy.get('[data-testid="modal-close"]').click();
+      cy.get(SELECTORS.MODAL_CLOSE).click();
 
       // Проверяем очистку конструктора после заказа
-      cy.get('[data-testid="constructor-bun"]').should('not.exist');
-      cy.get('[data-testid="constructor-ingredient"]').should('have.length', 0);
+      cy.get(SELECTORS.CONSTRUCTOR_BUN).should('not.exist');
+      cy.get(SELECTORS.CONSTRUCTOR_INGREDIENT).should('have.length', 0);
     });
   });
 

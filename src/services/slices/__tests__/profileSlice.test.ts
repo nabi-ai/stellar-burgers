@@ -7,7 +7,8 @@ import reducer, {
   setProfileLoading,
   setProfileError,
   clearProfile,
-  ProfileState
+  ProfileState,
+  profileSliceInitialState
 } from '../profileSlice';
 import { TUser } from '@utils-types';
 
@@ -16,27 +17,19 @@ const mockUser: TUser = {
   email: 'test@example.com'
 };
 
-const initialState: ProfileState = {
-  userData: null,
-  isEditing: false,
-  originalData: null,
-  isLoading: false,
-  error: null
-};
-
 describe('profileSlice', () => {
   describe('sync actions', () => {
     test('should return initial state', () => {
       const result = reducer(undefined, { type: '' });
-      expect(result).toEqual(initialState);
+      expect(result).toEqual(profileSliceInitialState);
     });
 
     test('should handle setUser - устанавливает пользователя и originalData', () => {
       const action = setUser(mockUser);
-      const result = reducer(initialState, action);
+      const result = reducer(profileSliceInitialState, action);
 
       expect(result).toEqual({
-        ...initialState,
+        ...profileSliceInitialState,
         userData: mockUser,
         originalData: mockUser
       });
@@ -44,7 +37,7 @@ describe('profileSlice', () => {
 
     test('should handle startEditing - начинает редактирование и сохраняет originalData', () => {
       const stateWithUser: ProfileState = {
-        ...initialState,
+        ...profileSliceInitialState,
         userData: mockUser
       };
 
@@ -80,7 +73,7 @@ describe('profileSlice', () => {
 
     test('should handle updateProfileData - обновляет данные пользователя', () => {
       const stateWithUser: ProfileState = {
-        ...initialState,
+        ...profileSliceInitialState,
         userData: mockUser
       };
 
@@ -119,10 +112,10 @@ describe('profileSlice', () => {
 
     test('should handle setProfileLoading - устанавливает статус загрузки', () => {
       const action = setProfileLoading(true);
-      const result = reducer(initialState, action);
+      const result = reducer(profileSliceInitialState, action);
 
       expect(result).toEqual({
-        ...initialState,
+        ...profileSliceInitialState,
         isLoading: true
       });
     });
@@ -130,10 +123,10 @@ describe('profileSlice', () => {
     test('should handle setProfileError - устанавливает ошибку', () => {
       const errorMessage = 'Profile error';
       const action = setProfileError(errorMessage);
-      const result = reducer(initialState, action);
+      const result = reducer(profileSliceInitialState, action);
 
       expect(result).toEqual({
-        ...initialState,
+        ...profileSliceInitialState,
         error: errorMessage
       });
     });
@@ -150,7 +143,7 @@ describe('profileSlice', () => {
       const action = clearProfile();
       const result = reducer(stateWithData, action);
 
-      expect(result).toEqual(initialState);
+      expect(result).toEqual(profileSliceInitialState);
     });
   });
 
@@ -233,7 +226,9 @@ describe('profileSlice', () => {
   });
 
   test('should return initial state for unknown action', () => {
-    const result = reducer(initialState, { type: 'UNKNOWN_ACTION' });
-    expect(result).toEqual(initialState);
+    const result = reducer(profileSliceInitialState, {
+      type: 'UNKNOWN_ACTION'
+    });
+    expect(result).toEqual(profileSliceInitialState);
   });
 });

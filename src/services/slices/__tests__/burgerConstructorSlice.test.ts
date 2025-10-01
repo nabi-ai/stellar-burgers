@@ -4,7 +4,8 @@ import reducer, {
   removeIngredient,
   reorderItems,
   reset,
-  ConstructorState
+  ConstructorState,
+  burgerSliceInitialState
 } from '../burgerConstructorSlice';
 import { TIngredient } from '@utils-types';
 
@@ -25,15 +26,9 @@ const bun: TIngredient = {
 const sauce: TIngredient = { ...bun, _id: 'id2', type: 'sauce', name: 'Соус' };
 
 describe('constructorSlice', () => {
-  const initialState: ConstructorState = {
-    bun: null,
-    items: [],
-    showOrderPreparingStarted: false
-  };
-
   it('возвращает initialState', () => {
     const result = reducer(undefined, { type: '' });
-    expect(result).toEqual(initialState);
+    expect(result).toEqual(burgerSliceInitialState);
   });
 
   it('добавляет булку', () => {
@@ -118,6 +113,6 @@ describe('constructorSlice', () => {
   it('сбрасывает конструктор', () => {
     const filled = reducer(undefined, addIngredient(sauce));
     const next = reducer(filled, reset());
-    expect(next).toEqual(initialState);
+    expect(next).toEqual(burgerSliceInitialState);
   });
 });

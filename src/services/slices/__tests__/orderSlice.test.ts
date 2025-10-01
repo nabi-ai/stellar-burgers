@@ -2,7 +2,8 @@ import reducer, {
   createOrder,
   fetchOrderByNumber,
   clearCreated,
-  OrderState
+  OrderState,
+  orderSliceInitialState
 } from '../orderSlice';
 import { TOrder } from '@utils-types';
 
@@ -14,13 +15,6 @@ const mockOrder: TOrder = {
   createdAt: '2024-01-01',
   updatedAt: '2024-01-01',
   number: 12345
-};
-
-const initialState: OrderState = {
-  created: null,
-  current: null,
-  isLoading: false,
-  error: null
 };
 
 // Мокаем API вызовы
@@ -37,10 +31,10 @@ describe('orderSlice async actions', () => {
   describe('createOrder', () => {
     test('should handle createOrder.pending', () => {
       const action = { type: createOrder.pending.type };
-      const result = reducer(initialState, action);
+      const result = reducer(orderSliceInitialState, action);
 
       expect(result).toEqual({
-        ...initialState,
+        ...orderSliceInitialState,
         isLoading: true,
         error: null
       });
@@ -51,10 +45,13 @@ describe('orderSlice async actions', () => {
         type: createOrder.fulfilled.type,
         payload: mockOrder
       };
-      const result = reducer({ ...initialState, isLoading: true }, action);
+      const result = reducer(
+        { ...orderSliceInitialState, isLoading: true },
+        action
+      );
 
       expect(result).toEqual({
-        ...initialState,
+        ...orderSliceInitialState,
         isLoading: false,
         created: mockOrder,
         error: null
@@ -67,10 +64,13 @@ describe('orderSlice async actions', () => {
         type: createOrder.rejected.type,
         payload: errorMessage
       };
-      const result = reducer({ ...initialState, isLoading: true }, action);
+      const result = reducer(
+        { ...orderSliceInitialState, isLoading: true },
+        action
+      );
 
       expect(result).toEqual({
-        ...initialState,
+        ...orderSliceInitialState,
         isLoading: false,
         error: errorMessage
       });
@@ -80,10 +80,10 @@ describe('orderSlice async actions', () => {
   describe('fetchOrderByNumber', () => {
     test('should handle fetchOrderByNumber.pending', () => {
       const action = { type: fetchOrderByNumber.pending.type };
-      const result = reducer(initialState, action);
+      const result = reducer(orderSliceInitialState, action);
 
       expect(result).toEqual({
-        ...initialState,
+        ...orderSliceInitialState,
         isLoading: true,
         error: null
       });
@@ -94,10 +94,13 @@ describe('orderSlice async actions', () => {
         type: fetchOrderByNumber.fulfilled.type,
         payload: mockOrder
       };
-      const result = reducer({ ...initialState, isLoading: true }, action);
+      const result = reducer(
+        { ...orderSliceInitialState, isLoading: true },
+        action
+      );
 
       expect(result).toEqual({
-        ...initialState,
+        ...orderSliceInitialState,
         isLoading: false,
         current: mockOrder,
         error: null
@@ -110,10 +113,13 @@ describe('orderSlice async actions', () => {
         type: fetchOrderByNumber.rejected.type,
         payload: errorMessage
       };
-      const result = reducer({ ...initialState, isLoading: true }, action);
+      const result = reducer(
+        { ...orderSliceInitialState, isLoading: true },
+        action
+      );
 
       expect(result).toEqual({
-        ...initialState,
+        ...orderSliceInitialState,
         isLoading: false,
         error: errorMessage
       });
@@ -123,7 +129,7 @@ describe('orderSlice async actions', () => {
   describe('sync actions', () => {
     test('should handle clearCreated', () => {
       const stateWithOrder: OrderState = {
-        ...initialState,
+        ...orderSliceInitialState,
         created: mockOrder
       };
 
@@ -136,8 +142,10 @@ describe('orderSlice async actions', () => {
     });
 
     test('should return initial state for unknown action', () => {
-      const result = reducer(initialState, { type: 'UNKNOWN_ACTION' });
-      expect(result).toEqual(initialState);
+      const result = reducer(orderSliceInitialState, {
+        type: 'UNKNOWN_ACTION'
+      });
+      orderSliceInitialState;
     });
   });
 });

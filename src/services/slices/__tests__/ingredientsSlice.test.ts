@@ -1,6 +1,6 @@
 import reducer, {
   fetchIngredients,
-  IngredientsState
+  ingredientsSliceInitialState
 } from '../ingredientsSlice';
 import { TIngredient } from '@utils-types';
 
@@ -33,12 +33,6 @@ const mockIngredients: TIngredient[] = [
   }
 ];
 
-const initialState: IngredientsState = {
-  items: [],
-  isLoading: false,
-  error: null
-};
-
 // Мокаем API вызов
 jest.mock('@api', () => ({
   getIngredientsApi: jest.fn()
@@ -52,7 +46,7 @@ describe('ingredientsSlice async actions', () => {
   describe('fetchIngredients', () => {
     test('should handle fetchIngredients.pending', () => {
       const action = { type: fetchIngredients.pending.type };
-      const result = reducer(initialState, action);
+      const result = reducer(ingredientsSliceInitialState, action);
 
       expect(result).toEqual({
         items: [],
@@ -66,7 +60,10 @@ describe('ingredientsSlice async actions', () => {
         type: fetchIngredients.fulfilled.type,
         payload: mockIngredients
       };
-      const result = reducer({ ...initialState, isLoading: true }, action);
+      const result = reducer(
+        { ...ingredientsSliceInitialState, isLoading: true },
+        action
+      );
 
       expect(result).toEqual({
         items: mockIngredients,
@@ -81,7 +78,10 @@ describe('ingredientsSlice async actions', () => {
         type: fetchIngredients.rejected.type,
         payload: errorMessage
       };
-      const result = reducer({ ...initialState, isLoading: true }, action);
+      const result = reducer(
+        { ...ingredientsSliceInitialState, isLoading: true },
+        action
+      );
 
       expect(result).toEqual({
         items: [],
@@ -95,7 +95,10 @@ describe('ingredientsSlice async actions', () => {
         type: fetchIngredients.rejected.type,
         payload: undefined
       };
-      const result = reducer({ ...initialState, isLoading: true }, action);
+      const result = reducer(
+        { ...ingredientsSliceInitialState, isLoading: true },
+        action
+      );
 
       expect(result).toEqual({
         items: [],
@@ -106,8 +109,10 @@ describe('ingredientsSlice async actions', () => {
   });
 
   test('should return initial state for unknown action', () => {
-    const result = reducer(initialState, { type: 'UNKNOWN_ACTION' });
-    expect(result).toEqual(initialState);
+    const result = reducer(ingredientsSliceInitialState, {
+      type: 'UNKNOWN_ACTION'
+    });
+    expect(result).toEqual(ingredientsSliceInitialState);
   });
 });
 
@@ -140,6 +145,8 @@ describe('ingredientsSlice selectors', () => {
 // Дополнительный тест для проверки начального состояния
 describe('ingredientsSlice initial state', () => {
   test('should return initial state', () => {
-    expect(reducer(undefined, { type: '' })).toEqual(initialState);
+    expect(reducer(undefined, { type: '' })).toEqual(
+      ingredientsSliceInitialState
+    );
   });
 });

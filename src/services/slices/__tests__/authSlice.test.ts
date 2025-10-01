@@ -5,20 +5,13 @@ import reducer, {
   updateUser,
   logoutUser,
   initialize,
-  UserState
+  authSliceInitialState
 } from '../authSlice';
 import { TUser } from '@utils-types';
 
 const mockUser: TUser = {
   name: 'Test User',
   email: 'test@example.com'
-};
-
-const initialState: UserState = {
-  isInitialized: false,
-  isLoading: false,
-  userData: null,
-  error: null
 };
 
 // Мокаем API и утилиты
@@ -38,10 +31,10 @@ describe('authSlice async actions', () => {
   describe('loginUser', () => {
     test('should handle loginUser.pending', () => {
       const action = { type: loginUser.pending.type };
-      const result = reducer(initialState, action);
+      const result = reducer(authSliceInitialState, action);
 
       expect(result).toEqual({
-        ...initialState,
+        ...authSliceInitialState,
         isLoading: true,
         error: null
       });
@@ -52,10 +45,13 @@ describe('authSlice async actions', () => {
         type: loginUser.fulfilled.type,
         payload: mockUser
       };
-      const result = reducer({ ...initialState, isLoading: true }, action);
+      const result = reducer(
+        { ...authSliceInitialState, isLoading: true },
+        action
+      );
 
       expect(result).toEqual({
-        ...initialState,
+        ...authSliceInitialState,
         isLoading: false,
         userData: mockUser,
         isInitialized: true,
@@ -69,10 +65,13 @@ describe('authSlice async actions', () => {
         type: loginUser.rejected.type,
         payload: errorMessage
       };
-      const result = reducer({ ...initialState, isLoading: true }, action);
+      const result = reducer(
+        { ...authSliceInitialState, isLoading: true },
+        action
+      );
 
       expect(result).toEqual({
-        ...initialState,
+        ...authSliceInitialState,
         isLoading: false,
         error: errorMessage
       });
@@ -82,10 +81,10 @@ describe('authSlice async actions', () => {
   describe('registerUser', () => {
     test('should handle registerUser.pending', () => {
       const action = { type: registerUser.pending.type };
-      const result = reducer(initialState, action);
+      const result = reducer(authSliceInitialState, action);
 
       expect(result).toEqual({
-        ...initialState,
+        ...authSliceInitialState,
         isLoading: true,
         error: null
       });
@@ -96,10 +95,13 @@ describe('authSlice async actions', () => {
         type: registerUser.fulfilled.type,
         payload: mockUser
       };
-      const result = reducer({ ...initialState, isLoading: true }, action);
+      const result = reducer(
+        { ...authSliceInitialState, isLoading: true },
+        action
+      );
 
       expect(result).toEqual({
-        ...initialState,
+        ...authSliceInitialState,
         isLoading: false,
         userData: mockUser,
         isInitialized: true,
@@ -113,10 +115,13 @@ describe('authSlice async actions', () => {
         type: registerUser.rejected.type,
         payload: errorMessage
       };
-      const result = reducer({ ...initialState, isLoading: true }, action);
+      const result = reducer(
+        { ...authSliceInitialState, isLoading: true },
+        action
+      );
 
       expect(result).toEqual({
-        ...initialState,
+        ...authSliceInitialState,
         isLoading: false,
         error: errorMessage
       });
@@ -126,10 +131,10 @@ describe('authSlice async actions', () => {
   describe('fetchUser', () => {
     test('should handle fetchUser.pending', () => {
       const action = { type: fetchUser.pending.type };
-      const result = reducer(initialState, action);
+      const result = reducer(authSliceInitialState, action);
 
       expect(result).toEqual({
-        ...initialState,
+        ...authSliceInitialState,
         isLoading: true,
         error: null
       });
@@ -140,10 +145,13 @@ describe('authSlice async actions', () => {
         type: fetchUser.fulfilled.type,
         payload: mockUser
       };
-      const result = reducer({ ...initialState, isLoading: true }, action);
+      const result = reducer(
+        { ...authSliceInitialState, isLoading: true },
+        action
+      );
 
       expect(result).toEqual({
-        ...initialState,
+        ...authSliceInitialState,
         isLoading: false,
         userData: mockUser,
         isInitialized: true,
@@ -157,10 +165,13 @@ describe('authSlice async actions', () => {
         type: fetchUser.rejected.type,
         payload: errorMessage
       };
-      const result = reducer({ ...initialState, isLoading: true }, action);
+      const result = reducer(
+        { ...authSliceInitialState, isLoading: true },
+        action
+      );
 
       expect(result).toEqual({
-        ...initialState,
+        ...authSliceInitialState,
         isLoading: false,
         isInitialized: true,
         userData: null,
@@ -172,10 +183,13 @@ describe('authSlice async actions', () => {
   describe('updateUser', () => {
     test('should handle updateUser.pending', () => {
       const action = { type: updateUser.pending.type };
-      const result = reducer({ ...initialState, userData: mockUser }, action);
+      const result = reducer(
+        { ...authSliceInitialState, userData: mockUser },
+        action
+      );
 
       expect(result).toEqual({
-        ...initialState,
+        ...authSliceInitialState,
         userData: mockUser,
         isLoading: true,
         error: null
@@ -189,12 +203,12 @@ describe('authSlice async actions', () => {
         payload: updatedUser
       };
       const result = reducer(
-        { ...initialState, userData: mockUser, isLoading: true },
+        { ...authSliceInitialState, userData: mockUser, isLoading: true },
         action
       );
 
       expect(result).toEqual({
-        ...initialState,
+        ...authSliceInitialState,
         isLoading: false,
         userData: updatedUser,
         error: null
@@ -208,12 +222,12 @@ describe('authSlice async actions', () => {
         payload: errorMessage
       };
       const result = reducer(
-        { ...initialState, userData: mockUser, isLoading: true },
+        { ...authSliceInitialState, userData: mockUser, isLoading: true },
         action
       );
 
       expect(result).toEqual({
-        ...initialState,
+        ...authSliceInitialState,
         userData: mockUser,
         isLoading: false,
         error: errorMessage
@@ -224,10 +238,13 @@ describe('authSlice async actions', () => {
   describe('logoutUser', () => {
     test('should handle logoutUser.pending', () => {
       const action = { type: logoutUser.pending.type };
-      const result = reducer({ ...initialState, userData: mockUser }, action);
+      const result = reducer(
+        { ...authSliceInitialState, userData: mockUser },
+        action
+      );
 
       expect(result).toEqual({
-        ...initialState,
+        ...authSliceInitialState,
         userData: mockUser,
         isLoading: true,
         error: null
@@ -237,12 +254,12 @@ describe('authSlice async actions', () => {
     test('should handle logoutUser.fulfilled', () => {
       const action = { type: logoutUser.fulfilled.type };
       const result = reducer(
-        { ...initialState, userData: mockUser, isLoading: true },
+        { ...authSliceInitialState, userData: mockUser, isLoading: true },
         action
       );
 
       expect(result).toEqual({
-        ...initialState,
+        ...authSliceInitialState,
         isLoading: false,
         userData: null,
         error: null
@@ -256,12 +273,12 @@ describe('authSlice async actions', () => {
         payload: errorMessage
       };
       const result = reducer(
-        { ...initialState, userData: mockUser, isLoading: true },
+        { ...authSliceInitialState, userData: mockUser, isLoading: true },
         action
       );
 
       expect(result).toEqual({
-        ...initialState,
+        ...authSliceInitialState,
         userData: mockUser,
         isLoading: false,
         error: errorMessage
@@ -273,16 +290,16 @@ describe('authSlice async actions', () => {
 describe('authSlice sync actions', () => {
   test('should handle initialize', () => {
     const action = initialize();
-    const result = reducer(initialState, action);
+    const result = reducer(authSliceInitialState, action);
 
     expect(result).toEqual({
-      ...initialState,
+      ...authSliceInitialState,
       isInitialized: true
     });
   });
 
   test('should return initial state for unknown action', () => {
-    const result = reducer(initialState, { type: 'UNKNOWN_ACTION' });
-    expect(result).toEqual(initialState);
+    const result = reducer(authSliceInitialState, { type: 'UNKNOWN_ACTION' });
+    expect(result).toEqual(authSliceInitialState);
   });
 });

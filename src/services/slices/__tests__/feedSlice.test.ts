@@ -1,4 +1,9 @@
-import reducer, { fetchFeeds, clearFeed, FeedState } from '../feedSlice';
+import reducer, {
+  fetchFeeds,
+  clearFeed,
+  FeedState,
+  feedSliceInitialState
+} from '../feedSlice';
 import { TOrder, TOrdersData } from '@utils-types';
 
 const mockOrders: TOrder[] = [
@@ -28,14 +33,6 @@ const mockFeedsData: TOrdersData = {
   totalToday: 10
 };
 
-const initialState: FeedState = {
-  orders: [],
-  total: 0,
-  totalToday: 0,
-  isLoading: false,
-  error: null
-};
-
 // Мокаем API вызов
 jest.mock('@api', () => ({
   getFeedsApi: jest.fn()
@@ -49,10 +46,10 @@ describe('feedSlice async actions', () => {
   describe('fetchFeeds', () => {
     test('should handle fetchFeeds.pending - устанавливает isLoading в true и сбрасывает ошибку', () => {
       const action = { type: fetchFeeds.pending.type };
-      const result = reducer(initialState, action);
+      const result = reducer(feedSliceInitialState, action);
 
       expect(result).toEqual({
-        ...initialState,
+        ...feedSliceInitialState,
         isLoading: true,
         error: null
       });
@@ -63,7 +60,10 @@ describe('feedSlice async actions', () => {
         type: fetchFeeds.fulfilled.type,
         payload: mockFeedsData
       };
-      const result = reducer({ ...initialState, isLoading: true }, action);
+      const result = reducer(
+        { ...feedSliceInitialState, isLoading: true },
+        action
+      );
 
       expect(result).toEqual({
         orders: mockOrders,
@@ -80,10 +80,13 @@ describe('feedSlice async actions', () => {
         type: fetchFeeds.rejected.type,
         payload: errorMessage
       };
-      const result = reducer({ ...initialState, isLoading: true }, action);
+      const result = reducer(
+        { ...feedSliceInitialState, isLoading: true },
+        action
+      );
 
       expect(result).toEqual({
-        ...initialState,
+        ...feedSliceInitialState,
         isLoading: false,
         error: errorMessage
       });
@@ -102,12 +105,12 @@ describe('feedSlice async actions', () => {
 
       const result = reducer(stateWithData, clearFeed());
 
-      expect(result).toEqual(initialState);
+      expect(result).toEqual(feedSliceInitialState);
     });
 
     test('should return initial state for unknown action', () => {
-      const result = reducer(initialState, { type: 'UNKNOWN_ACTION' });
-      expect(result).toEqual(initialState);
+      const result = reducer(feedSliceInitialState, { type: 'UNKNOWN_ACTION' });
+      expect(result).toEqual(feedSliceInitialState);
     });
   });
 });

@@ -9,7 +9,7 @@ export type IngredientsState = {
   error: string | null;
 };
 
-const initialState: IngredientsState = {
+export const ingredientsSliceInitialState: IngredientsState = {
   items: [],
   isLoading: false,
   error: null
@@ -31,7 +31,7 @@ export const fetchIngredients = createAsyncThunk(
 
 const ingredientsSlice = createSlice({
   name: 'ingredients',
-  initialState,
+  initialState: ingredientsSliceInitialState,
   reducers: {},
   extraReducers: (builder) => {
     builder

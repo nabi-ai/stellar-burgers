@@ -11,7 +11,7 @@ export type ProfileOrdersState = {
   error: string | null;
 };
 
-const initialState: ProfileOrdersState = {
+export const profileOrderInitialState: ProfileOrdersState = {
   orders: [],
   total: 0,
   totalToday: 0,
@@ -35,9 +35,9 @@ export const fetchProfileOrders = createAsyncThunk<TOrder[]>(
   }
 );
 
-const profileOrdersSlice = createSlice({
+export const profileOrdersSlice = createSlice({
   name: 'profileOrders',
-  initialState,
+  initialState: profileOrderInitialState,
   reducers: {
     clearProfileOrders: (state) => {
       state.orders = [];

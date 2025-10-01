@@ -10,7 +10,7 @@ export type ProfileState = {
   error: string | null;
 };
 
-const initialState: ProfileState = {
+export const profileSliceInitialState: ProfileState = {
   userData: null,
   isEditing: false,
   originalData: null,
@@ -20,7 +20,7 @@ const initialState: ProfileState = {
 
 const profileSlice = createSlice({
   name: 'profile',
-  initialState,
+  initialState: profileSliceInitialState,
   reducers: {
     setUser: (state, action: PayloadAction<TUser>) => {
       state.userData = action.payload;

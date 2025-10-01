@@ -1,12 +1,6 @@
 declare namespace Cypress {
   interface Chainable {
-    /**
-     * Авторизация пользователя
-     */
     login(): Chainable<void>;
-    /**
-     * Добавление ингредиента в конструктор
-     */
     addIngredient(ingredientName: string): Chainable<void>;
   }
 }

@@ -11,7 +11,7 @@ export type OrderState = {
   error: string | null;
 };
 
-const initialState: OrderState = {
+export const orderSliceInitialState: OrderState = {
   created: null,
   current: null,
   isLoading: false,
@@ -51,7 +51,7 @@ export const fetchOrderByNumber = createAsyncThunk<TOrder, number>(
 
 const orderSlice = createSlice({
   name: 'order',
-  initialState,
+  initialState: orderSliceInitialState,
   reducers: {
     clearCreated(state) {
       state.created = null;

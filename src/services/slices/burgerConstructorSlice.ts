@@ -8,7 +8,7 @@ export type ConstructorState = {
   showOrderPreparingStarted: boolean;
 };
 
-const initialState: ConstructorState = {
+export const burgerSliceInitialState: ConstructorState = {
   bun: null,
   items: [],
   showOrderPreparingStarted: false
@@ -16,7 +16,7 @@ const initialState: ConstructorState = {
 
 const burgerConstructorSlice = createSlice({
   name: 'burgerConstructor',
-  initialState,
+  initialState: burgerSliceInitialState,
   reducers: {
     setBun(state, action: PayloadAction<TIngredient>) {
       state.bun = action.payload;

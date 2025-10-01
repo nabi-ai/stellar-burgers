@@ -19,7 +19,7 @@ export type UserState = {
   error: string | null;
 };
 
-const initialState: UserState = {
+export const authSliceInitialState: UserState = {
   isInitialized: false,
   isLoading: false,
   userData: null,
@@ -112,7 +112,7 @@ export const logoutUser = createAsyncThunk(
 
 const authSlice = createSlice({
   name: 'auth',
-  initialState,
+  initialState: authSliceInitialState,
   reducers: {
     initialize: (state) => {
       state.isInitialized = true;

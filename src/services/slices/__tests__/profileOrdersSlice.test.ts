@@ -1,7 +1,8 @@
 import reducer, {
   fetchProfileOrders,
   clearProfileOrders,
-  ProfileOrdersState
+  ProfileOrdersState,
+  profileOrderInitialState
 } from '../profileOrdersSlice';
 import { TOrder } from '@utils-types';
 
@@ -26,14 +27,6 @@ const mockOrders: TOrder[] = [
   }
 ];
 
-const initialState: ProfileOrdersState = {
-  orders: [],
-  total: 0,
-  totalToday: 0,
-  isLoading: false,
-  error: null
-};
-
 // Мокаем API вызов
 jest.mock('@api', () => ({
   getOrdersApi: jest.fn()
@@ -47,10 +40,10 @@ describe('profileOrdersSlice async actions', () => {
   describe('fetchProfileOrders', () => {
     test('should handle fetchProfileOrders.pending - устанавливает isLoading в true и сбрасывает ошибку', () => {
       const action = { type: fetchProfileOrders.pending.type };
-      const result = reducer(initialState, action);
+      const result = reducer(profileOrderInitialState, action);
 
       expect(result).toEqual({
-        ...initialState,
+        ...profileOrderInitialState,
         isLoading: true,
         error: null
       });
@@ -61,7 +54,10 @@ describe('profileOrdersSlice async actions', () => {
         type: fetchProfileOrders.fulfilled.type,
         payload: mockOrders
       };
-      const result = reducer({ ...initialState, isLoading: true }, action);
+      const result = reducer(
+        { ...profileOrderInitialState, isLoading: true },
+        action
+      );
 
       expect(result).toEqual({
         orders: mockOrders,
@@ -78,10 +74,13 @@ describe('profileOrdersSlice async actions', () => {
         type: fetchProfileOrders.rejected.type,
         payload: errorMessage
       };
-      const result = reducer({ ...initialState, isLoading: true }, action);
+      const result = reducer(
+        { ...profileOrderInitialState, isLoading: true },
+        action
+      );
 
       expect(result).toEqual({
-        ...initialState,
+        ...profileOrderInitialState,
         isLoading: false,
         error: errorMessage
       });
@@ -100,12 +99,14 @@ describe('profileOrdersSlice async actions', () => {
 
       const result = reducer(stateWithData, clearProfileOrders());
 
-      expect(result).toEqual(initialState);
+      expect(result).toEqual(profileOrderInitialState);
     });
 
     test('should return initial state for unknown action', () => {
-      const result = reducer(initialState, { type: 'UNKNOWN_ACTION' });
-      expect(result).toEqual(initialState);
+      const result = reducer(profileOrderInitialState, {
+        type: 'UNKNOWN_ACTION'
+      });
+      expect(result).toEqual(profileOrderInitialState);
     });
   });
 });
